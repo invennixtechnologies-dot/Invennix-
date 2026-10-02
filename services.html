@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#03050b">
+<title>Services | Invennix</title><meta name="description" content="Invennix: websites, apps, AI, design, domains and hosting. Code. Create. Innovate.">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css">
+</head><body data-p="services"><main>
+<div class="wrap pg"><h2>Our services</h2><p class="lead">Tap any service to see what you get. Select it to tell us about your project.</p><div class="grid" id="svc"></div></div>
+<div class="mo" id="mo"><div class="md" role="dialog" aria-modal="true"><button class="x" id="mx" aria-label="Close">×</button><h3 id="mt"></h3><p id="mp"></p><ul id="ml"></ul><div class="row"><a class="btn" id="mf" href="service.html">Full description</a><button class="btn g" id="mb">Select this service</button></div></div></div>
+</main><script src="assets/app.js"></script>
+<script>let c=0;S.forEach((s,i)=>$('svc').insertAdjacentHTML('beforeend','<button class="card" data-i="'+i+'"><svg viewBox="0 0 24 24"><path d="'+s[2]+'"/></svg><h3>'+s[0]+'</h3><p>'+s[1]+'</p><small>Tap to know more</small></button>'));
+$('svc').onclick=e=>{const b=e.target.closest('.card');if(!b)return;c=+b.dataset.i;const s=S[c];$('mt').textContent=s[0];$('mp').textContent=s[3];$('ml').innerHTML=s[4].map(x=>'<li>'+x+'</li>').join('');$('mf').href='service.html?s='+c;$('mo').classList.add('on')};
+$('mx').onclick=()=>$('mo').classList.remove('on');$('mo').onclick=e=>{if(e.target==$('mo'))$('mo').classList.remove('on')};$('mb').onclick=()=>pick(S[c][0])</script>
+</body></html>
