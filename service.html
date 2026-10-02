@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#03050b">
+<title>Service | Invennix</title><link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css">
+</head><body data-p="services"><main>
+<div class="wrap pg"><a href="services.html" style="color:var(--cyan);font-size:14px">← All services</a><h2 id="t" style="margin-top:14px"></h2><p class="lead" id="d"></p>
+<div class="stats"><div><strong id="tm" style="font-size:22px"></strong><span>Typical time</span></div><div><strong id="pr2" style="font-size:22px"></strong><span>Starting price</span></div></div></div>
+<section><div class="wrap two"><div><h2 style="font-size:28px">What is included</h2><div class="chips" id="inc" style="margin-top:14px"></div><h2 style="font-size:28px;margin-top:26px">Tools we use</h2><div class="chips" id="tl2" style="margin-top:14px"></div></div><div><h2 style="font-size:28px">Who it is for</h2><ul id="wf" style="color:var(--mute);padding-left:18px;margin-top:14px;line-height:2"></ul></div></div></section>
+<section><div class="wrap"><h2 style="font-size:28px">How we deliver</h2><ol class="steps" style="margin-top:20px"><li><h3>Share your idea</h3><p>Tell us what you need below.</p></li><li><h3>Plan and quote</h3><p>We reply with a plan and a fixed price.</p></li><li><h3>Build</h3><p>Weekly working builds shared with you.</p></li><li><h3>Launch</h3><p>Delivery, deployment and support.</p></li></ol></div></section>
+<section id="idea"><div class="wrap"><div class="idea"><h2 style="font-size:28px">Add your own idea</h2><p class="lead" style="margin-bottom:6px">Tell us what you want for <b id="sn"></b>. We will customise it for you.</p>
+<label for="tx">Describe your project, your ideas and make your customised app, website etc.</label><textarea id="tx" placeholder="Write your idea, features you want, budget and deadline."></textarea>
+<label for="nm">Your name</label><input id="nm" autocomplete="name"><label for="em">Phone or email</label><input id="em">
+<div class="row"><button class="btn g" id="mic" type="button">🎤 Speak your idea</button><button class="btn" id="mail" type="button">Send by email</button><button class="btn g" id="wa2" type="button">Send on WhatsApp</button></div><div id="note" role="status"></div></div>
+<div class="row" style="justify-content:space-between;margin-top:30px"><a class="btn g" id="pv">← Previous</a><a class="btn g" id="nx">Next service →</a></div></div></section>
+</main><script src="assets/app.js"></script><script>
+const id=Math.max(0,Math.min(7,+(new URLSearchParams(location.search).get('s'))||0)),s=S[id],x=X[id],ch=a=>a.map(v=>'<span class="chip on">'+v+'</span>').join('');
+document.title=s[0]+' | Invennix';$('t').textContent=s[0];$('d').textContent=x[0];$('tm').textContent=x[4];$('pr2').textContent='₹'+x[5];$('sn').textContent=s[0];
+$('inc').innerHTML=ch(x[2]);$('tl2').innerHTML=ch(x[3]);$('wf').innerHTML=x[1].map(v=>'<li>'+v+'</li>').join('');
+$('pv').href='service.html?s='+(id+7)%8;$('nx').href='service.html?s='+(id+1)%8;
+const tx=$('tx'),note=$('note'),mic=$('mic'),SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec,on=0;
+if(!SR)mic.style.display='none';else mic.onclick=()=>{if(on){rec.stop();return}rec=new SR();rec.lang='hi-IN';rec.continuous=true;rec.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)tx.value+=(tx.value?' ':'')+e.results[i][0].transcript};rec.onend=()=>{on=0;mic.classList.remove('rec');mic.textContent='🎤 Speak your idea'};rec.onerror=()=>{note.textContent='Mic not available. Please type your idea.'};rec.start();on=1;mic.classList.add('rec');mic.textContent='Listening... tap to stop'};
+const M=()=>{if(!tx.value.trim()){note.textContent='Please write your idea first.';return null}return 'Service: '+s[0]+'\nName: '+$('nm').value+'\nContact: '+$('em').value+'\n\nMy idea:\n'+tx.value};
+$('mail').onclick=()=>{const m=M();if(m)location.href='mailto:'+CFG.email+'?subject='+encodeURIComponent('Idea for '+s[0])+'&body='+encodeURIComponent(m)};
+$('wa2').onclick=()=>{const m=M();if(m)window.open('https://wa.me/91'+CFG.phone+'?text='+encodeURIComponent(m),'_blank')};
+</script></body></html>
