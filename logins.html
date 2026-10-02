@@ -1,13 +1,124 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#03050b">
-<title>Premium login pages | Invennix</title><meta name="description" content="Invennix: websites, apps, AI, design, domains and hosting. Code. Create. Innovate.">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css">
-</head><body data-p="logins"><main>
-<div class="wrap pg"><h2>Premium login pages</h2><p class="lead">20 ready login designs in every popular style. Tap one to ask for it on your site or app.</p><div class="chips" id="cats"></div><div class="tiles" id="tiles"></div></div>
-</main><script src="assets/app.js"></script>
-<script>const C=[['Glassmorphism','glass',4],['Neumorphism','neu',3],['Claymorphism','clay',3],['Neon glow','neon',4],['Minimal clean','min',3],['Aurora gradient','aurt',3]];let cat='all';
-$('cats').innerHTML='<button class="chip on" data-c="all">All 20</button>'+C.map(c=>'<button class="chip" data-c="'+c[1]+'">'+c[0]+'</button>').join('');
-$('cats').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.dataset.c;[...$('cats').children].forEach(x=>x.classList.toggle('on',x==b));T()};
-function T(){let h='',n=0;C.forEach(c=>{for(let k=0;k<c[2];k++){n++;if(cat=='all'||cat==c[1])h+='<div class="tw" data-d="'+c[0]+' login #'+n+'"><div class="t '+c[1]+'" style="position:relative;overflow:hidden;--h:'+(n*47)%360+'"><div class="c"><em></em><i></i><i></i><b></b></div><img alt="" loading="lazy" src="assets/login'+n+'.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()"></div><p>'+c[0]+' · Design '+n+'</p></div>'}});$('tiles').innerHTML=h}T();
-$('tiles').onclick=e=>{const t=e.target.closest('.tw');if(t)pick('UI/UX Design','I like this login page style: '+t.dataset.d+'. ')}</script>
-</body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#03050b">
+  <title>Premium Login Pages | Invennix</title>
+  <meta name="description" content="20 premium login page designs by Invennix: glassmorphism, neumorphism, claymorphism, neon, minimal and aurora.">
+
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+
+  <style>
+    /* Photo shown inside every design tile */
+    .t { position: relative; overflow: hidden; }
+    .shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .tw:focus-visible .t { outline: 2px solid var(--cyan); outline-offset: 3px; }
+  </style>
+</head>
+
+<body data-p="logins">
+  <main>
+    <div class="wrap pg">
+      <h2>Premium login pages</h2>
+      <p class="lead">20 ready login designs in every popular style. Tap one to ask for it on your site or app.</p>
+
+      <!-- Category buttons and design grid are created by the script below -->
+      <div class="chips" id="categories" role="group" aria-label="Design categories"></div>
+      <div class="tiles" id="designs"></div>
+    </div>
+  </main>
+
+  <script src="assets/app.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      /* 1. Categories and the number of designs in each (total = 20) */
+      const CATEGORIES = [
+        { name: 'Glassmorphism',   count: 4 },
+        { name: 'Neumorphism',     count: 3 },
+        { name: 'Claymorphism',    count: 3 },
+        { name: 'Neon glow',       count: 4 },
+        { name: 'Minimal clean',   count: 3 },
+        { name: 'Aurora gradient', count: 3 }
+      ];
+
+      /* 2. Flat list of designs: login1.jpg ... login20.jpg */
+      const DESIGNS = [];
+      CATEGORIES.forEach(({ name, count }) => {
+        for (let i = 0; i < count; i++) {
+          DESIGNS.push({ id: DESIGNS.length + 1, category: name });
+        }
+      });
+
+      const filtersEl = document.getElementById('categories');
+      const gridEl = document.getElementById('designs');
+      let activeFilter = 'All';
+
+      /* 3. HTML for one design tile (colored box shows if the photo is missing) */
+      function tileTemplate({ id, category }) {
+        const hue = (id * 47) % 360;
+        return `
+          <div class="tw" role="button" tabindex="0" data-id="${id}" data-category="${category}">
+            <div class="t" style="--h:${hue}">
+              <img class="shot" src="assets/login${id}.jpg"
+                   alt="${category} login design ${id}" loading="lazy"
+                   onerror="this.remove()">
+            </div>
+            <p>${category} · Design ${id}</p>
+          </div>`;
+      }
+
+      /* 4. Draw the grid for the selected category */
+      function renderDesigns() {
+        gridEl.innerHTML = DESIGNS
+          .filter(d => activeFilter === 'All' || d.category === activeFilter)
+          .map(tileTemplate)
+          .join('');
+      }
+
+      /* 5. Draw the category buttons */
+      function renderFilters() {
+        const labels = ['All', ...CATEGORIES.map(c => c.name)];
+        filtersEl.innerHTML = labels
+          .map(label => `<button type="button" class="chip${label === activeFilter ? ' on' : ''}">${label}</button>`)
+          .join('');
+      }
+
+      /* 6. Client picks a design: send them to the dashboard with the choice filled in */
+      function chooseDesign(tile) {
+        const { id, category } = tile.dataset;
+        pick('UI/UX Design', `I like this login page style: ${category} login #${id}. `);
+      }
+
+      /* 7. Events */
+      filtersEl.addEventListener('click', event => {
+        const button = event.target.closest('.chip');
+        if (!button) return;
+        activeFilter = button.textContent;
+        renderFilters();
+        renderDesigns();
+      });
+
+      gridEl.addEventListener('click', event => {
+        const tile = event.target.closest('.tw');
+        if (tile) chooseDesign(tile);
+      });
+
+      gridEl.addEventListener('keydown', event => {
+        const tile = event.target.closest('.tw');
+        if (tile && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          chooseDesign(tile);
+        }
+      });
+
+      /* 8. Start */
+      renderFilters();
+      renderDesigns();
+    })();
+  </script>
+</body>
+</html>
