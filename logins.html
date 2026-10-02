@@ -8,6 +8,6 @@
 <script>const C=[['Glassmorphism','glass',4],['Neumorphism','neu',3],['Claymorphism','clay',3],['Neon glow','neon',4],['Minimal clean','min',3],['Aurora gradient','aurt',3]];let cat='all';
 $('cats').innerHTML='<button class="chip on" data-c="all">All 20</button>'+C.map(c=>'<button class="chip" data-c="'+c[1]+'">'+c[0]+'</button>').join('');
 $('cats').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.dataset.c;[...$('cats').children].forEach(x=>x.classList.toggle('on',x==b));T()};
-function T(){let h='',n=0;C.forEach(c=>{for(let k=0;k<c[2];k++){n++;if(cat=='all'||cat==c[1])h+='<div class="tw" data-d="'+c[0]+' login #'+n+'"><div class="t '+c[1]+'" style="--h:'+(n*47)%360+'"><div class="c"><em></em><i></i><i></i><b></b></div></div><p>'+c[0]+' · Design '+n+'</p></div>'}});$('tiles').innerHTML=h}T();
+function T(){let h='',n=0;C.forEach(c=>{for(let k=0;k<c[2];k++){n++;if(cat=='all'||cat==c[1])h+='<div class="tw" data-d="'+c[0]+' login #'+n+'"><div class="t '+c[1]+'" style="position:relative;overflow:hidden;--h:'+(n*47)%360+'"><div class="c"><em></em><i></i><i></i><b></b></div><img alt="" loading="lazy" src="assets/login'+n+'.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()"></div><p>'+c[0]+' · Design '+n+'</p></div>'}});$('tiles').innerHTML=h}T();
 $('tiles').onclick=e=>{const t=e.target.closest('.tw');if(t)pick('UI/UX Design','I like this login page style: '+t.dataset.d+'. ')}</script>
 </body></html>
